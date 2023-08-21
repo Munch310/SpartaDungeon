@@ -1,168 +1,227 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System.ComponentModel;
 
 namespace SpartaDungeon
 {
     internal class Program
     {
-        private static PlayerStat ps;
-        static Dictionary<string, List<Inventory>> inventoryDict = new Dictionary<string, List<Inventory>>();
+        private static PlayerStat playerStat;
+        private static ItemData itemData;
+        // 플레이어가 아이템을 구매하면, ItemInDatabase -> playerInventory -> playuerEquippedItems로 넘어가는 구조
+        static List<ItemData> itemsInDatabase = new List<ItemData>();
+        static List<ItemData> playerEquippedItems = new List<ItemData>();
+
         static void Main(string[] args)
         {
-            GameDataSetting();
-            GameStart();
-
+            InitItemDatabase();
+            PlayerDataSet();
+            MainGameScene();
         }
-
-        static void GameDataSetting()
+        static void InitItemDatabase()
         {
-            ps = new PlayerStat(1, "Munch", 10, 5, 100, 500);
-
-            List<Inventory> inventoryList = new List<Inventory>();
-            
-            inventoryList.Add(new Inventory("낡은 검", "무기", "흔하게 보이는 검이다.", 2, 0));
-            inventoryList.Add(new Inventory("라브리스", "무기", "이 양날 전투 도끼는 적을 박살 낼 것이다.", 10, 0));
-
-            inventoryDict["Inventory"] = inventoryList;
-
+            itemsInDatabase.Add(new ItemData(0, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다."));
+            itemsInDatabase.Add(new ItemData(1, "천 갑옷", 0, 2, "질긴 천을 덧대어 제작한 낡은 갑옷입니다."));
+            itemsInDatabase.Add(new ItemData(2, "헤라클레스의 곤봉", 5, 0, "이 곤봉은 12가지 과업을 대비해서 갖고 다녀야합니다."));
+            itemsInDatabase.Add(new ItemData(3, "포세이돈의 삼지창", 10, 0, "이 삼지창을 쥐면 바다를 다스릴 수 있다는 소문 때문에 선원들이 탐내는 무기입니다."));
+            itemsInDatabase.Add(new ItemData(4, "헤르메스 트리스메기투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다."));
         }
-
-        static public void GameStart()
+        static void PlayerDataSet()
         {
+            Console.Title = "닉네임을 설정하세요!";
+            Console.WriteLine("게임에 사용하실 닉네임을 입력해주세요!");
+            Console.Write(">>");
+            // 게임 닉네임 설정 및 데이터 설정
+            string _inputName = Console.ReadLine();
 
-            Console.Clear();
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.WriteLine("이곳에서 던전으로 들어가기 전 행동을 선택하세요!\n");
-            Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 인벤토리");
-            Console.WriteLine("3. 상점");
-            Console.WriteLine("4. 던전 입장");
-            Console.WriteLine("5. 휴식하기");
-            Console.WriteLine(" ");
-            Console.WriteLine("원하시는 행동을 입력해주세요.\n >>");
-            int _action = CheckValidAction(1, 5);
-            switch (_action)
+            if (_inputName != null)
             {
-                case 1:
-                    ViewStat();
-                    break;
-                case 2:
-                    ViewInventory();
-                    break;
-            }
-
-        }
-
-        static void ViewStat()
-        {
-            Console.Clear();
-            Console.WriteLine($"{ps.Name}님의 인벤토리\n");
-            Console.WriteLine($" 레벨 : {ps.Level}");
-            Console.WriteLine($" 이름 : {ps.Name}");
-            Console.WriteLine($" 공격력 : {ps.AtkValue}");
-            Console.WriteLine($" 방어력 : {ps.DefValue}");
-            Console.WriteLine($" 체력 : {ps.HpValue}");
-            Console.WriteLine($" 골드 : {ps.Gold} G");
-            Console.WriteLine(" ");
-            Console.WriteLine("0. 돌아가기");
-
-            int _action = CheckValidAction(0, 0);
-            switch (_action)
-            {
-                case 0:
-                    GameStart();
-                    break;
-            }
-        }
-
-        static void ViewInventory()
-        {
-            Console.Clear();
-            Console.WriteLine($"{ps.Name}님의 인벤토리\n");
-
-            List<Inventory> viewInventory = inventoryDict["Inventory"];
-
-
-            if (viewInventory.Count == 0)
-            {
-                Console.WriteLine("인벤토리가 비어있습니다.");
+                Console.Clear();
+                playerStat = new PlayerStat($"{_inputName}", "전사", 1, 10, 5, 100, 1500);
             }
             else
             {
-                Console.WriteLine("[아이템 목록]");
-                Console.WriteLine(new string('-', 13)); // 구분선 출력
-
-                foreach (var item in viewInventory)
-                {
-                    Console.WriteLine($"| {item.ItemName} | {item.ItemType} | {item.ItemComm} | 공격력 + {item.ItemAtkValue} | 방어력 + {item.ItemDefValue} |");
-                }
+                Console.WriteLine("이름을 입력해주세요!");
             }
+        }
 
+        static void MainGameScene()
+        {
+            Console.Title = "스파르타 던전";
+            SetConsoleColor(ConsoleColor.Red);
+            Console.WriteLine("Sparta Dungeon Game!");
+            Console.ResetColor();
+            SetConsoleColor(ConsoleColor.Cyan);
+            Console.Write($"{playerStat.Name} ");
+            Console.ResetColor();
+            Console.WriteLine("님, 스파르타 마을에 오신것을 환영합니다!\n");
+            Console.WriteLine("이곳에서 던전으로 돌아가기 전 활동을 할 수 있습니다.\n");
+            Console.WriteLine("0. 게임 종료");
+            Console.WriteLine("1. 상태 보기");
+            Console.WriteLine("2. 인벤토리");
+            Console.WriteLine(" ");
+            int _input = CheckValidAction(0, 2);
 
-            Console.WriteLine("1. 관리하기");
-            Console.WriteLine("0. 돌아가기");
-
-            int _action = CheckValidAction(0, 1);
-            switch (_action)
+            switch (_input)
             {
                 case 0:
-                    GameStart();
-                    Console.WriteLine();
+                    Environment.Exit(0);
+                    break;
+                case 1:
+                    DisplayPlayerState();
+                    break;
+                case 2:
+                    DisplayPlayerInventory();
+                    break;
+            }
+        }
+
+        static void DisplayPlayerInventory()
+        {
+            Console.Clear();
+            Console.Title = "인벤토리";
+            Console.WriteLine("[인벤토리]");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
+            Console.WriteLine("[아이템 목록]");
+
+            string ItemEquipped;
+            for (int i = 0; i < itemsInDatabase.Count; i++)
+            {
+                ItemData item = itemsInDatabase[i];
+
+                ItemEquipped = item.IsItemEquipped ? "[E] " : "";
+                if (item.IsItemEquipped)
+                {
+                    SetConsoleColor(ConsoleColor.Yellow);
+
+                }
+                Console.Write($"{ItemEquipped}");
+                Console.ResetColor();
+                Console.Write($"{item.ItemName}");
+                DisplayAtkOrDef(item); // DisplayAtkOrDef 메서드에 아이템 객체를 전달
+                Console.WriteLine($" {item.ItemComm} ");
+            }
+            Console.WriteLine(" ");
+            Console.WriteLine("1. 장착 관리");
+            Console.WriteLine("0. 나가기");
+
+            int _input = CheckValidAction(0, 1);
+
+            switch (_input)
+            {
+                case 0:
+                    Console.Clear();
+                    MainGameScene();
                     break;
                 case 1:
                     Console.Clear();
-                    ManagementInventory();
+                    ManagementPlayerInventory();
                     break;
-
             }
         }
 
-
-        static void ManagementInventory()
+        static void ManagementPlayerInventory()
         {
             Console.Clear();
-            Console.WriteLine($"{ps.Name}님의 인벤토리 관리\n");
-            Console.WriteLine($"아이템을 장착하시려면, 아이템을 선택해주세요!");
-            List<Inventory> ManagementInventory = inventoryDict["Inventory"];
-
-            if (ManagementInventory.Count == 0)
+            // 콘솔창 타이틀 변경
+            Console.Title = "인벤토리 - 장착관리";
+            Console.WriteLine("[인벤토리 - 장착관리]");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
+            Console.WriteLine("[아이템 목록]");
+            string ItemEquipped;
+            for (int i = 0; i < itemsInDatabase.Count; i++)
             {
-                Console.WriteLine("인벤토리가 비어있습니다.");
+                ItemData item = itemsInDatabase[i];
+                ItemEquipped = item.IsItemEquipped ? "[E] " : "";
+                if (item.IsItemEquipped)
+                {
+                    SetConsoleColor(ConsoleColor.Yellow);
+                }
+                Console.Write($"{ItemEquipped}");
+                Console.ResetColor();
+                Console.Write($"{item.ItemName}");
+                DisplayAtkOrDef(item); // DisplayAtkOrDef 메서드에 아이템 객체를 전달
+                Console.WriteLine($" {item.ItemComm} ");
+            }
+            Console.WriteLine(" ");
+            Console.WriteLine("0. 나가기");
+            int _input = CheckValidAction(0, itemsInDatabase.Count);
+
+            if (_input == 0)
+            {
+                Console.Clear();
+                DisplayPlayerInventory();
+            }
+            else if (_input > 0 && _input <= itemsInDatabase.Count)
+            {
+                // 아이템 인덱스는 0부터 시작!
+                ItemData selectedItem = itemsInDatabase[_input - 1];
+                ToggleEquip(selectedItem);
+                ManagementPlayerInventory();
+            }
+        }
+
+        static void ToggleEquip(ItemData item)
+        {
+            item.IsItemEquipped = !item.IsItemEquipped;
+
+            if (item.IsItemEquipped)
+            {
+                playerEquippedItems.Add(item);
             }
             else
             {
-                int equippedIndex = -1; // 초기값으로 장착된 아이템이 없음을 나타냄
-                Console.WriteLine("[아이템 목록]");
-                Console.WriteLine(new string('-', 13)); // 구분선 출력
-
-                for (int i = 0; i < ManagementInventory.Count; i++)
-                {
-                    var item = ManagementInventory[i];
-                    Console.WriteLine($"| {i + 1} | {item.ItemName} | {item.ItemType} | {item.ItemComm} | 공격력 + {item.ItemAtkValue} | 방어력 + {item.ItemDefValue} |");
-                }
-
-                Console.WriteLine("번호를 선택하세요: ");
-                int _selectItem = CheckValidAction(1, ManagementInventory.Count);
-                switch (_selectItem)
-                {
-                    case 1:
-                        break;
-                }
+                playerEquippedItems.Remove(item);
             }
 
-            Console.WriteLine("0. 돌아가기");
+            UpdatePlayerStats();
+        }
 
-            int _action = CheckValidAction(0, 1);
-            switch (_action)
+        static void UpdatePlayerStats()
+        {
+            int totalAtk = 0;
+            int totalDef = 0;
+
+            foreach (ItemData item in playerEquippedItems)
+            {
+                totalAtk += item.ItemAtk;
+                totalDef += item.ItemDef;
+            }
+
+            playerStat.AtkValue = playerStat.BaseAtkValue + totalAtk;
+            playerStat.DefValue = playerStat.BaseDefValue + totalDef;
+        }
+        static void DisplayAtkOrDef(ItemData item)
+        {
+            if (item.ItemAtk > 0 && item.ItemDef == 0)
+            {
+                Console.Write($"| 공격력 + {item.ItemAtk} |");
+            }
+            else if (item.ItemAtk == 0 && item.ItemDef > 0)
+            {
+                Console.Write($"| 방어력 + {item.ItemDef} |");
+            }
+        }
+
+        static void DisplayPlayerState()
+        {
+            Console.Clear();
+            Console.WriteLine($"상태보기");
+            Console.WriteLine($"캐릭터의 정보가 표시됩니다.");
+            Console.WriteLine($"Lv. {playerStat.Level}");
+            Console.WriteLine($"{playerStat.Name} ( {playerStat.PlayerClass} )");
+            Console.WriteLine($"공격력 : {playerStat.AtkValue}");
+            Console.WriteLine($"방어력 : {playerStat.DefValue}");
+            Console.WriteLine($"체 력 : {playerStat.HpValue}"); ;
+            Console.WriteLine($"Gold : {playerStat.Gold} G");
+            Console.WriteLine(" ");
+            Console.WriteLine("0. 나가기");
+            int _input = CheckValidAction(0, 0);
+
+            switch (_input)
             {
                 case 0:
-                    ViewInventory();
-                    Console.WriteLine();
+                    Console.Clear();
+                    MainGameScene();
                     break;
-                case 1:
-                    
-                    Console.WriteLine();
-                    break;
-
             }
         }
 
@@ -170,57 +229,71 @@ namespace SpartaDungeon
         {
             while (true)
             {
-                string _action = Console.ReadLine();
+                Console.WriteLine(" ");
+                Console.WriteLine(" 원하시는 행동을 입력해주세요.");
+                Console.Write(">>");
+                string _input = Console.ReadLine();
 
-                bool _parseSuccess = int.TryParse(_action, out var _ret);
+                bool _parseSuccess = int.TryParse(_input, out var _ret);
                 if (_parseSuccess)
                 {
                     if (_ret >= _min && _ret <= _max)
                         return _ret;
                 }
-
                 Console.WriteLine("잘못된 입력입니다.");
             }
         }
 
-        public class Inventory
+        static void SetConsoleColor(ConsoleColor foregroundColor)
         {
-            public string ItemName { get; }
-            public string ItemType { get; }
-            public string ItemComm { get; }
-            public int ItemAtkValue { get; }
-            public int ItemDefValue { get; }
-
-            public Inventory(string _itemName, string _itemType, string _itemComm, int _itemAtkValue, int _itemDefValue)
-            {
-                ItemName = _itemName;
-                ItemType = _itemType;
-                ItemComm = _itemComm;
-                ItemAtkValue = _itemAtkValue;
-                ItemDefValue = _itemDefValue;
-            }
+            Console.ForegroundColor = foregroundColor;
         }
+    }
 
-        
+    public class PlayerStat
+    {
+        public string Name;
+        public string PlayerClass;
+        public int Level;
+        public int AtkValue;
+        public int DefValue;
+        public int HpValue;
+        public int Gold;
+        public int BaseAtkValue;
+        public int BaseDefValue;
 
-        public class PlayerStat
+        public PlayerStat(string _name, string _playerClass, int _level, int _atkValue, int _defValue, int _hpValue, int _gold)
         {
-            public int Level { get; }
-            public string Name { get; }
-            public int AtkValue { get; set; }
-            public int DefValue { get; set; }
-            public int HpValue { get; }
-            public int Gold { get; }
+            Name = _name;
+            PlayerClass = _playerClass;
+            Level = _level;
+            AtkValue = _atkValue;
+            DefValue = _defValue;
+            HpValue = _hpValue;
+            Gold = _gold;
 
-            public PlayerStat(int _level, string _name, int _atkValue, int _defValue, int _hpValue, int _gold)
-            {
-                Level = _level;
-                Name = _name;
-                AtkValue = _atkValue;
-                DefValue = _defValue;
-                HpValue = _hpValue;
-                Gold = _gold;
-            }
+            BaseAtkValue = _atkValue;
+            BaseDefValue = _defValue;
+        }
+    }
+
+    public class ItemData
+    {
+        public int ItemId;
+        public bool IsItemEquipped;
+        public string ItemName;
+        public int ItemAtk;
+        public int ItemDef;
+        public string ItemComm;
+
+        public ItemData(int _itemId, string _itemName, int _itemAtk, int _itemDef, string _itemComm)
+        {
+            ItemId = _itemId;
+            ItemName = _itemName;
+            ItemAtk = _itemAtk;
+            ItemDef = _itemDef;
+            ItemComm = _itemComm;
+            IsItemEquipped = false;
         }
     }
 }
