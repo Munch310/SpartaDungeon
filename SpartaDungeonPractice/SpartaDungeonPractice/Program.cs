@@ -81,29 +81,29 @@
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
             Console.WriteLine("[아이템 목록]");
 
-            string itemEquipped;
+            string _itemEquipped;
             for (int i = 0; i < _itemsInDatabase.Count; i++)
             {
-                ItemData item = _itemsInDatabase[i];
+                ItemData _item = _itemsInDatabase[i];
 
-                itemEquipped = item.IsItemEquipped ? "[E] " : "";
-                if (item.IsItemEquipped)
+                _itemEquipped = _item.IsItemEquipped ? "[E] " : "";
+                if (_item.IsItemEquipped)
                 {
                     SetConsoleColor(ConsoleColor.Yellow);
                 }
-                Console.Write($"{itemEquipped}");
+                Console.Write($"{_itemEquipped}");
                 Console.ResetColor();
-                Console.Write($"{item.ItemName}");
-                DisplayAtkOrDef(item);
-                Console.WriteLine($" {item.ItemComm} ");
+                Console.Write($"{_item.ItemName}");
+                DisplayAtkOrDef(_item);
+                Console.WriteLine($" {_item.ItemComm} ");
             }
             Console.WriteLine(" ");
             Console.WriteLine("1. 장착 관리");
             Console.WriteLine("0. 나가기");
 
-            int input = CheckValidAction(0, 1);
+            int _input = CheckValidAction(0, 1);
 
-            switch (input)
+            switch (_input)
             {
                 case 0:
                     Console.Clear();
@@ -123,99 +123,101 @@
             Console.WriteLine("[인벤토리 - 장착관리]");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
             Console.WriteLine("[아이템 목록]");
-            string itemEquipped;
+            string _itemEquipped;
             for (int i = 0; i < _itemsInDatabase.Count; i++)
             {
-                ItemData item = _itemsInDatabase[i];
-                itemEquipped = item.IsItemEquipped ? "[E] " : "";
-                if (item.IsItemEquipped)
+                ItemData _item = _itemsInDatabase[i];
+                _itemEquipped = _item.IsItemEquipped ? "[E] " : "";
+                if (_item.IsItemEquipped)
                 {
                     SetConsoleColor(ConsoleColor.Yellow);
                 }
-                Console.Write($"{itemEquipped}");
+                Console.Write($"{_itemEquipped}");
                 Console.ResetColor();
-                Console.Write($"{item.ItemName}");
-                DisplayAtkOrDef(item);
-                Console.WriteLine($" {item.ItemComm} ");
+                Console.Write($"{_item.ItemId + 1}.{_item.ItemName}");
+                DisplayAtkOrDef(_item);
+                Console.WriteLine($" {_item.ItemComm} ");
             }
             Console.WriteLine(" ");
             Console.WriteLine("0. 나가기");
-            int input = CheckValidAction(0, _itemsInDatabase.Count);
+            int _input = CheckValidAction(0, _itemsInDatabase.Count);
 
-            if (input == 0)
+            if (_input == 0)
             {
                 Console.Clear();
                 DisplayPlayerInventory();
             }
-            else if (input > 0 && input <= _itemsInDatabase.Count)
+            else if (_input > 0 && _input <= _itemsInDatabase.Count)
             {
-                ItemData selectedItem = _itemsInDatabase[input - 1];
-                ToggleEquip(selectedItem);
+                ItemData _selectedItem = _itemsInDatabase[_input - 1];
+                ToggleEquip(_selectedItem);
                 ManagementPlayerInventory();
             }
         }
 
-        static void ToggleEquip(ItemData item)
+        static void ToggleEquip(ItemData _item)
         {
-            bool isAtkItemEqupped = IsAtkItemEquipped();
-            bool isDefItemEquipped = IsDefItemEquipped();
+            bool _isAtkItemEqupped = IsAtkItemEquipped();
+            bool _isDefItemEquipped = IsDefItemEquipped();
 
-            if (item.ItemAtk > 0 && isAtkItemEqupped && !item.IsItemEquipped)
+            if (_item.ItemAtk > 0 && _isAtkItemEqupped && !_item.IsItemEquipped)
             {
                 return;
             }
 
-            if (item.ItemDef > 0 && isDefItemEquipped && !item.IsItemEquipped)
+            if (_item.ItemDef > 0 && _isDefItemEquipped && !_item.IsItemEquipped)
             {
                 return;
             }
 
-            item.IsItemEquipped = !item.IsItemEquipped;
+            _item.IsItemEquipped = !_item.IsItemEquipped;
 
-            if (item.IsItemEquipped)
+            if (_item.IsItemEquipped)
             {
-                _playerEquippedItems.Add(item);
+                _playerEquippedItems.Add(_item);
             }
             else
             {
-                _playerEquippedItems.Remove(item);
+                _playerEquippedItems.Remove(_item);
             }
+            // 만약 이미 장착한 아이템이 있다면? -> ItemAtk
+            
 
             UpdatePlayerStats();
         }
 
         static void UpdatePlayerStats()
         {
-            int totalAtk = 0;
-            int totalDef = 0;
+            int _totalAtk = 0;
+            int _totalDef = 0;
 
-            foreach (ItemData item in _playerEquippedItems)
+            foreach (ItemData _item in _playerEquippedItems)
             {
-                totalAtk += item.ItemAtk;
-                totalDef += item.ItemDef;
+                _totalAtk += _item.ItemAtk;
+                _totalDef += _item.ItemDef;
             }
 
-            _playerStat.AtkValue = _playerStat.BaseAtkValue + totalAtk;
-            _playerStat.DefValue = _playerStat.BaseDefValue + totalDef;
+            _playerStat.AtkValue = _playerStat.BaseAtkValue + _totalAtk;
+            _playerStat.DefValue = _playerStat.BaseDefValue + _totalDef;
         }
 
-        static void DisplayAtkOrDef(ItemData item)
+        static void DisplayAtkOrDef(ItemData _item)
         {
-            if (item.ItemAtk > 0 && item.ItemDef == 0)
+            if (_item.ItemAtk > 0 && _item.ItemDef == 0)
             {
-                Console.Write($"| 공격력 + {item.ItemAtk} |");
+                Console.Write($"| 공격력 + {_item.ItemAtk} |");
             }
-            else if (item.ItemAtk == 0 && item.ItemDef > 0)
+            else if (_item.ItemAtk == 0 && _item.ItemDef > 0)
             {
-                Console.Write($"| 방어력 + {item.ItemDef} |");
+                Console.Write($"| 방어력 + {_item.ItemDef} |");
             }
         }
 
         static bool IsAtkItemEquipped()
         {
-            foreach (ItemData item in _playerEquippedItems)
+            foreach (ItemData _tem in _playerEquippedItems)
             {
-                if (item.ItemAtk > 0)
+                if (_tem.ItemAtk > 0)
                 {
                     return true;
                 }
@@ -225,9 +227,9 @@
 
         static bool IsDefItemEquipped()
         {
-            foreach (ItemData item in _playerEquippedItems)
+            foreach (ItemData _item in _playerEquippedItems)
             {
-                if (item.ItemDef > 0)
+                if (_item.ItemDef > 0)
                 {
                     return true;
                 }
@@ -248,9 +250,9 @@
             Console.WriteLine($"Gold : {_playerStat.Gold} G");
             Console.WriteLine(" ");
             Console.WriteLine("0. 나가기");
-            int input = CheckValidAction(0, 0);
+            int _input = CheckValidAction(0, 0);
 
-            switch (input)
+            switch (_input)
             {
                 case 0:
                     Console.Clear();
