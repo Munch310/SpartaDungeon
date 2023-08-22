@@ -1,14 +1,11 @@
-﻿using System.ComponentModel;
-
-namespace SpartaDungeon
+﻿namespace SpartaDungeon
 {
     internal class Program
     {
-        private static PlayerStat playerStat;
-        private static ItemData itemData;
-        // 플레이어가 아이템을 구매하면, ItemInDatabase -> playerInventory -> playuerEquippedItems로 넘어가는 구조
-        static List<ItemData> itemsInDatabase = new List<ItemData>();
-        static List<ItemData> playerEquippedItems = new List<ItemData>();
+        private static PlayerStat _playerStat;
+        private static ItemData _itemData;
+        static List<ItemData> _itemsInDatabase = new List<ItemData>();
+        static List<ItemData> _playerEquippedItems = new List<ItemData>();
 
         static void Main(string[] args)
         {
@@ -16,26 +13,28 @@ namespace SpartaDungeon
             PlayerDataSet();
             MainGameScene();
         }
+
         static void InitItemDatabase()
         {
-            itemsInDatabase.Add(new ItemData(0, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다."));
-            itemsInDatabase.Add(new ItemData(1, "천 갑옷", 0, 2, "질긴 천을 덧대어 제작한 낡은 갑옷입니다."));
-            itemsInDatabase.Add(new ItemData(2, "헤라클레스의 곤봉", 5, 0, "이 곤봉은 12가지 과업을 대비해서 갖고 다녀야합니다."));
-            itemsInDatabase.Add(new ItemData(3, "포세이돈의 삼지창", 10, 0, "이 삼지창을 쥐면 바다를 다스릴 수 있다는 소문 때문에 선원들이 탐내는 무기입니다."));
-            itemsInDatabase.Add(new ItemData(4, "헤르메스 트리스메기투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다."));
+            _itemsInDatabase.Add(new ItemData(0, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다."));
+            _itemsInDatabase.Add(new ItemData(1, "천 갑옷", 0, 2, "질긴 천을 덧대어 제작한 낡은 갑옷입니다."));
+            _itemsInDatabase.Add(new ItemData(2, "헤라클레스의 곤봉", 5, 0, "이 곤봉은 12가지 과업을 대비해서 갖고 다녀야합니다."));
+            _itemsInDatabase.Add(new ItemData(3, "포세이돈의 삼지창", 10, 0, "이 삼지창을 쥐면 바다를 다스릴 수 있다는 소문 때문에 선원들이 탐내는 무기입니다."));
+            _itemsInDatabase.Add(new ItemData(4, "헤르메스 트리스메기투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다."));
         }
+
         static void PlayerDataSet()
         {
             Console.Title = "닉네임을 설정하세요!";
             Console.WriteLine("게임에 사용하실 닉네임을 입력해주세요!");
             Console.Write(">>");
-            // 게임 닉네임 설정 및 데이터 설정
-            string _inputName = Console.ReadLine();
 
-            if (_inputName != null)
+            string inputName = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(inputName))
             {
                 Console.Clear();
-                playerStat = new PlayerStat($"{_inputName}", "전사", 1, 10, 5, 100, 1500);
+                _playerStat = new PlayerStat($"{inputName}", "전사", 1, 10, 5, 100, 1500);
             }
             else
             {
@@ -50,7 +49,7 @@ namespace SpartaDungeon
             Console.WriteLine("Sparta Dungeon Game!");
             Console.ResetColor();
             SetConsoleColor(ConsoleColor.Cyan);
-            Console.Write($"{playerStat.Name} ");
+            Console.Write($"{_playerStat.Name} ");
             Console.ResetColor();
             Console.WriteLine("님, 스파르타 마을에 오신것을 환영합니다!\n");
             Console.WriteLine("이곳에서 던전으로 돌아가기 전 활동을 할 수 있습니다.\n");
@@ -58,9 +57,9 @@ namespace SpartaDungeon
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine(" ");
-            int _input = CheckValidAction(0, 2);
+            int input = CheckValidAction(0, 2);
 
-            switch (_input)
+            switch (input)
             {
                 case 0:
                     Environment.Exit(0);
@@ -82,30 +81,29 @@ namespace SpartaDungeon
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
             Console.WriteLine("[아이템 목록]");
 
-            string ItemEquipped;
-            for (int i = 0; i < itemsInDatabase.Count; i++)
+            string itemEquipped;
+            for (int i = 0; i < _itemsInDatabase.Count; i++)
             {
-                ItemData item = itemsInDatabase[i];
+                ItemData item = _itemsInDatabase[i];
 
-                ItemEquipped = item.IsItemEquipped ? "[E] " : "";
+                itemEquipped = item.IsItemEquipped ? "[E] " : "";
                 if (item.IsItemEquipped)
                 {
                     SetConsoleColor(ConsoleColor.Yellow);
-
                 }
-                Console.Write($"{ItemEquipped}");
+                Console.Write($"{itemEquipped}");
                 Console.ResetColor();
                 Console.Write($"{item.ItemName}");
-                DisplayAtkOrDef(item); // DisplayAtkOrDef 메서드에 아이템 객체를 전달
+                DisplayAtkOrDef(item);
                 Console.WriteLine($" {item.ItemComm} ");
             }
             Console.WriteLine(" ");
             Console.WriteLine("1. 장착 관리");
             Console.WriteLine("0. 나가기");
 
-            int _input = CheckValidAction(0, 1);
+            int input = CheckValidAction(0, 1);
 
-            switch (_input)
+            switch (input)
             {
                 case 0:
                     Console.Clear();
@@ -121,39 +119,37 @@ namespace SpartaDungeon
         static void ManagementPlayerInventory()
         {
             Console.Clear();
-            // 콘솔창 타이틀 변경
             Console.Title = "인벤토리 - 장착관리";
             Console.WriteLine("[인벤토리 - 장착관리]");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
             Console.WriteLine("[아이템 목록]");
-            string ItemEquipped;
-            for (int i = 0; i < itemsInDatabase.Count; i++)
+            string itemEquipped;
+            for (int i = 0; i < _itemsInDatabase.Count; i++)
             {
-                ItemData item = itemsInDatabase[i];
-                ItemEquipped = item.IsItemEquipped ? "[E] " : "";
+                ItemData item = _itemsInDatabase[i];
+                itemEquipped = item.IsItemEquipped ? "[E] " : "";
                 if (item.IsItemEquipped)
                 {
                     SetConsoleColor(ConsoleColor.Yellow);
                 }
-                Console.Write($"{ItemEquipped}");
+                Console.Write($"{itemEquipped}");
                 Console.ResetColor();
                 Console.Write($"{item.ItemName}");
-                DisplayAtkOrDef(item); // DisplayAtkOrDef 메서드에 아이템 객체를 전달
+                DisplayAtkOrDef(item);
                 Console.WriteLine($" {item.ItemComm} ");
             }
             Console.WriteLine(" ");
             Console.WriteLine("0. 나가기");
-            int _input = CheckValidAction(0, itemsInDatabase.Count);
+            int input = CheckValidAction(0, _itemsInDatabase.Count);
 
-            if (_input == 0)
+            if (input == 0)
             {
                 Console.Clear();
                 DisplayPlayerInventory();
             }
-            else if (_input > 0 && _input <= itemsInDatabase.Count)
+            else if (input > 0 && input <= _itemsInDatabase.Count)
             {
-                // 아이템 인덱스는 0부터 시작!
-                ItemData selectedItem = itemsInDatabase[_input - 1];
+                ItemData selectedItem = _itemsInDatabase[input - 1];
                 ToggleEquip(selectedItem);
                 ManagementPlayerInventory();
             }
@@ -161,15 +157,28 @@ namespace SpartaDungeon
 
         static void ToggleEquip(ItemData item)
         {
+            bool isAtkItemEqupped = IsAtkItemEquipped();
+            bool isDefItemEquipped = IsDefItemEquipped();
+
+            if (item.ItemAtk > 0 && isAtkItemEqupped && !item.IsItemEquipped)
+            {
+                return;
+            }
+
+            if (item.ItemDef > 0 && isDefItemEquipped && !item.IsItemEquipped)
+            {
+                return;
+            }
+
             item.IsItemEquipped = !item.IsItemEquipped;
 
             if (item.IsItemEquipped)
             {
-                playerEquippedItems.Add(item);
+                _playerEquippedItems.Add(item);
             }
             else
             {
-                playerEquippedItems.Remove(item);
+                _playerEquippedItems.Remove(item);
             }
 
             UpdatePlayerStats();
@@ -180,15 +189,16 @@ namespace SpartaDungeon
             int totalAtk = 0;
             int totalDef = 0;
 
-            foreach (ItemData item in playerEquippedItems)
+            foreach (ItemData item in _playerEquippedItems)
             {
                 totalAtk += item.ItemAtk;
                 totalDef += item.ItemDef;
             }
 
-            playerStat.AtkValue = playerStat.BaseAtkValue + totalAtk;
-            playerStat.DefValue = playerStat.BaseDefValue + totalDef;
+            _playerStat.AtkValue = _playerStat.BaseAtkValue + totalAtk;
+            _playerStat.DefValue = _playerStat.BaseDefValue + totalDef;
         }
+
         static void DisplayAtkOrDef(ItemData item)
         {
             if (item.ItemAtk > 0 && item.ItemDef == 0)
@@ -201,22 +211,46 @@ namespace SpartaDungeon
             }
         }
 
+        static bool IsAtkItemEquipped()
+        {
+            foreach (ItemData item in _playerEquippedItems)
+            {
+                if (item.ItemAtk > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static bool IsDefItemEquipped()
+        {
+            foreach (ItemData item in _playerEquippedItems)
+            {
+                if (item.ItemDef > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         static void DisplayPlayerState()
         {
             Console.Clear();
             Console.WriteLine($"상태보기");
             Console.WriteLine($"캐릭터의 정보가 표시됩니다.");
-            Console.WriteLine($"Lv. {playerStat.Level}");
-            Console.WriteLine($"{playerStat.Name} ( {playerStat.PlayerClass} )");
-            Console.WriteLine($"공격력 : {playerStat.AtkValue}");
-            Console.WriteLine($"방어력 : {playerStat.DefValue}");
-            Console.WriteLine($"체 력 : {playerStat.HpValue}"); ;
-            Console.WriteLine($"Gold : {playerStat.Gold} G");
+            Console.WriteLine($"Lv. {_playerStat.Level}");
+            Console.WriteLine($"{_playerStat.Name} ( {_playerStat.PlayerClass} )");
+            Console.WriteLine($"공격력 : {_playerStat.AtkValue}");
+            Console.WriteLine($"방어력 : {_playerStat.DefValue}");
+            Console.WriteLine($"체 력 : {_playerStat.HpValue}"); ;
+            Console.WriteLine($"Gold : {_playerStat.Gold} G");
             Console.WriteLine(" ");
             Console.WriteLine("0. 나가기");
-            int _input = CheckValidAction(0, 0);
+            int input = CheckValidAction(0, 0);
 
-            switch (_input)
+            switch (input)
             {
                 case 0:
                     Console.Clear();
@@ -275,6 +309,7 @@ namespace SpartaDungeon
             BaseAtkValue = _atkValue;
             BaseDefValue = _defValue;
         }
+
     }
 
     public class ItemData
