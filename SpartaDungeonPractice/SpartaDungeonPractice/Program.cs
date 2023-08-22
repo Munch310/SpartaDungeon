@@ -92,7 +92,6 @@ namespace SpartaDungeonPractice
                 if (item.IsItemEquipped)
                 {
                     SetConsoleColor(ConsoleColor.Yellow);
-
                 }
                 Console.Write($"{ItemEquipped}");
                 Console.ResetColor();
@@ -140,6 +139,7 @@ namespace SpartaDungeonPractice
                 Console.ResetColor();
                 Console.Write($"{item.ItemName}");
                 DisplayAtkOrDef(item); // DisplayAtkOrDef 메서드에 아이템 객체를 전달
+                
                 Console.WriteLine($" {item.ItemComm} ");
             }
             Console.WriteLine(" ");
@@ -162,6 +162,22 @@ namespace SpartaDungeonPractice
 
         static void ToggleEquip(ItemData item)
         {
+            bool isAtkItemEqupped = IsAtkItemEquipped();
+
+            bool isDefItemEquipped = IsDefItemEquipped();
+
+            // 아이템의 공격력이 부여되고, 아이템이 장착되고, 아이템 착용 상태라면
+            if (item.ItemAtk > 0 && isAtkItemEqupped && !item.IsItemEquipped)
+            {
+                return;
+            }
+
+            // 아이템의 방어력이 부여되고, 아이템이 장착되고, 아이템 착용 상태라면
+            if (item.ItemDef > 0 && isDefItemEquipped && !item.IsItemEquipped)
+            {
+                return;
+            }
+
             item.IsItemEquipped = !item.IsItemEquipped;
 
             if (item.IsItemEquipped)
@@ -200,7 +216,33 @@ namespace SpartaDungeonPractice
             {
                 Console.Write($"| 방어력 + {item.ItemDef} |");
             }
+            
         }
+        static bool IsAtkItemEquipped()
+        {
+            foreach (ItemData item in playerEquippedItems)
+            {
+                if (item.ItemAtk > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static bool IsDefItemEquipped()
+        {
+            foreach(ItemData item in playerEquippedItems)
+            {
+                if(item.ItemDef > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
 
         static void DisplayPlayerState()
         {
@@ -225,6 +267,8 @@ namespace SpartaDungeonPractice
                     break;
             }
         }
+
+
 
         static int CheckValidAction(int _min, int _max)
         {
