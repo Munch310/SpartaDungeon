@@ -259,10 +259,18 @@
             ItemData _selectedShopItem = _itemsInDatabase[_itemIndex];
             if (_selectedShopItem.IsPlayerOwned == true)
             {
+                // 장착된 아이템 해제 후 판매가 진행되어야 한다.
+                if (_selectedShopItem.IsItemEquipped)
+                {
+                    ToggleEquip(_selectedShopItem); // 아이템 장착 해제
+                }
+
                 double _sellRet = _selectedShopItem.ItemPrice * 0.8;
                 _playerStat.Gold += (int)_sellRet;
                 _selectedShopItem.IsPlayerOwned = false;
                 Console.WriteLine($"{_selectedShopItem.ItemName}을(를) 판매하였습니다.\n");
+
+                UpdatePlayerStats();
             }
             Console.WriteLine("아무 키나 입력하세요...\n"); // 사용자의 입력을 기다림
             Console.ReadKey(); // 아무 키나 입력할 때까지 대기
@@ -320,7 +328,7 @@
                     break;
             }
         }
-        
+
         static void ManagementPlayerInventory()
         {
             Console.Clear();
@@ -407,7 +415,7 @@
             // 중복 방어구 아이템 제거 후 장착
             if (_item.ItemDef > 0 && _isDefItemEquipped && !_item.IsItemEquipped)
             {
-                for (int i = _playerEquippedItems.Count -1; i >= 0; i--)
+                for (int i = _playerEquippedItems.Count - 1; i >= 0; i--)
                 {
                     ItemData item = _playerEquippedItems[i];
                     if (item.IsItemEquipped && item.ItemDef > 0)
