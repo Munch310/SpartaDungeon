@@ -19,11 +19,10 @@
         static void InitItemDatabase()
         {
             _itemsInDatabase.Add(new ItemData(0, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다.", 200, true));
-            _itemsInDatabase.Add(new ItemData(1, "천 갑옷", 0, 2, "질긴 천을 덧대어 제작한 낡은 갑옷입니다.", 200, true));
+            _itemsInDatabase.Add(new ItemData(1, "천 갑옷", 0, 2, "질긴 천을 덧대어 제작한 낡은 갑옷입니다.", 150, true));
             _itemsInDatabase.Add(new ItemData(2, "헤라클레스의 곤봉", 5, 0, "이 곤봉은 12가지 과업을 대비해서 갖고 다녀야합니다.", 500, false));
             _itemsInDatabase.Add(new ItemData(3, "포세이돈의 삼지창", 10, 0, "이 삼지창을 쥐면 바다를 다스릴 수 있습니다.", 1000, false));
-            _itemsInDatabase.Add(new ItemData(4, "무한의 검", 15, 0, "끝없는 힘을 가진 검", 1500, false));
-            _itemsInDatabase.Add(new ItemData(5, "신령의 갑옷", 0, 15, "신비한 힘이 깃든 갑옷", 1500, false));
+            _itemsInDatabase.Add(new ItemData(5, "신령의 갑옷", 0, 15, "신비한 힘이 깃든 갑옷", 1300, false));
             _itemsInDatabase.Add(new ItemData(6, "트리스메기투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다.", 3000, false));
         }
 
@@ -99,6 +98,49 @@
                     Console.WriteLine($"{i + 1} | {_itemName} | {_itemComm} | 구매 가격 : {_shopItem.ItemPrice} G");
                 }
             }
+            Console.WriteLine(" ");
+            Console.WriteLine("2. 아이템 판매");
+            Console.WriteLine("1. 아이템 구매");
+            Console.WriteLine("0. 나가기");
+
+            int _input = CheckValidAction(0, 2);
+
+            switch (_input)
+            {
+                case 0:
+                    Console.Clear();
+                    MainGameScene();
+                    break;
+                case 1:
+                    Console.Clear();
+                    BuyManagementItemShop();
+                    break;
+                case 2:
+                    Console.Clear();
+                    SellManagementItemShop();
+                    break;
+            }
+        }
+
+        static void BuyManagementItemShop()
+        {
+            Console.Clear();
+            Console.Title = "상점";
+            Console.WriteLine("[보유 골드]\n");
+            Console.WriteLine($"{_playerStat.Gold} G\n");
+            Console.WriteLine("[상점 아이템 목록]\n");
+
+            for (int i = 0; i < _itemsInDatabase.Count; i++)
+            {
+                ItemData _shopItem = _itemsInDatabase[i];
+                string _itemName = FormatAndPad(_shopItem.ItemName, 17);
+                string _itemComm = FormatAndPad(_shopItem.ItemComm, 40);
+
+                if (!_shopItem.IsPlayerOwned)
+                {
+                    Console.WriteLine($"{i + 1} | {_itemName} | {_itemComm} | 구매 가격 : {_shopItem.ItemPrice} G");
+                }
+            }
             Console.WriteLine("");
             Console.WriteLine("[인벤토리 아이템 목록]\n");
 
@@ -120,7 +162,7 @@
             if (_input == 0)
             {
                 Console.Clear();
-                MainGameScene();
+                DisplayItemShop();
             }
             else
             {
@@ -131,14 +173,68 @@
                 {
                     BuyItem(_itemIndex); // 아이템을 구매
                 }
-                else
+                // 상점 목록을 다시 출력
+                BuyManagementItemShop();
+            }
+        }
+
+        static void SellManagementItemShop()
+        {
+            Console.Clear();
+            Console.Title = "상점";
+            Console.WriteLine("[보유 골드]\n");
+            Console.WriteLine($"{_playerStat.Gold} G\n");
+            Console.WriteLine("[상점 아이템 목록]\n");
+
+            for (int i = 0; i < _itemsInDatabase.Count; i++)
+            {
+                ItemData _shopItem = _itemsInDatabase[i];
+                string _itemName = FormatAndPad(_shopItem.ItemName, 17);
+                string _itemComm = FormatAndPad(_shopItem.ItemComm, 40);
+
+                if (!_shopItem.IsPlayerOwned)
+                {
+                    Console.WriteLine($"{i + 1} | {_itemName} | {_itemComm} | 구매 가격 : {_shopItem.ItemPrice} G");
+                }
+            }
+            Console.WriteLine("");
+            Console.WriteLine("[인벤토리 아이템 목록]\n");
+
+            for (int i = 0; i < _itemsInDatabase.Count; i++)
+            {
+                ItemData _inventoryItem = _itemsInDatabase[i];
+                if (_inventoryItem.IsPlayerOwned)
+                {
+                    Console.WriteLine($"{i + 1} | {_inventoryItem.ItemName} | 판매 가격 :{_inventoryItem.ItemPrice * 0.8} G | 소지중");
+                }
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("0. 나가기\n");
+
+            Console.WriteLine("아이템의 고유 번호를 입력해주세요.");
+            int _input = CheckValidAction(0, _itemsInDatabase.Count);
+
+            if (_input == 0)
+            {
+                Console.Clear();
+                DisplayItemShop();
+            }
+            else
+            {
+                // 입력한 번호에 해당하는 아이템의 인덱스 계산
+                int _itemIndex = _input - 1;
+
+                if (_itemsInDatabase[_itemIndex].IsPlayerOwned == true)
                 {
                     Sell_Item(_itemIndex); // 아이템을 판매
                 }
                 // 상점 목록을 다시 출력
-                DisplayItemShop();
+                SellManagementItemShop();
             }
         }
+
+
 
         static void BuyItem(int _itemIndex)
         {
@@ -148,12 +244,16 @@
             {
                 _playerStat.Gold -= _selectedShopItem.ItemPrice;
                 _selectedShopItem.IsPlayerOwned = true;
+                Console.WriteLine("");
+                Console.WriteLine($"{_selectedShopItem.ItemName}을(를) 구매하였습니다.\n");
             }
             else
             {
+                Console.WriteLine("");
                 Console.WriteLine("골드가 부족합니다.");
             }
-            DisplayItemShop(); // 상점 목록을 다시 출력해줌
+            Console.WriteLine("아무 키나 입력하세요...\n"); // 사용자의 입력을 기다림
+            Console.ReadKey(); // 아무 키나 입력할 때까지 대기
         }
 
         static void Sell_Item(int _itemIndex)
@@ -164,9 +264,10 @@
                 double _sellRet = _selectedShopItem.ItemPrice * 0.8;
                 _playerStat.Gold += (int)_sellRet;
                 _selectedShopItem.IsPlayerOwned = false;
+                Console.WriteLine($"{_selectedShopItem.ItemName}을(를) 판매하였습니다.\n");
             }
-
-            DisplayItemShop();
+            Console.WriteLine("아무 키나 입력하세요...\n"); // 사용자의 입력을 기다림
+            Console.ReadKey(); // 아무 키나 입력할 때까지 대기
         }
 
         static void DisplayPlayerInventory()
