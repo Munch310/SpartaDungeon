@@ -22,8 +22,8 @@
             _itemsInDatabase.Add(new ItemData(1, "천 갑옷", 0, 2, "질긴 천을 덧대어 제작한 낡은 갑옷입니다.", 150, true));
             _itemsInDatabase.Add(new ItemData(2, "헤라클레스의 곤봉", 5, 0, "이 곤봉은 12가지 과업을 대비해서 갖고 다녀야합니다.", 500, false));
             _itemsInDatabase.Add(new ItemData(3, "포세이돈의 삼지창", 10, 0, "이 삼지창을 쥐면 바다를 다스릴 수 있습니다.", 1000, false));
-            _itemsInDatabase.Add(new ItemData(5, "신령의 갑옷", 0, 15, "신비한 힘이 깃든 갑옷", 1300, false));
-            _itemsInDatabase.Add(new ItemData(6, "트리스메기투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다.", 3000, false));
+            _itemsInDatabase.Add(new ItemData(4, "신령의 갑옷", 0, 15, "신비한 힘이 깃든 갑옷", 1300, false));
+            _itemsInDatabase.Add(new ItemData(5, "트리스메기투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다.", 3000, false));
         }
 
         static void PlayerDataSet()
@@ -234,8 +234,6 @@
             }
         }
 
-
-
         static void BuyItem(int _itemIndex)
         {
             ItemData _selectedShopItem = _itemsInDatabase[_itemIndex];
@@ -389,17 +387,45 @@
 
         static void ToggleEquip(ItemData _item)
         {
-            bool _isAtkItemEqupped = IsAtkItemEquipped();
+            bool _isAtkItemEquipped = IsAtkItemEquipped();
             bool _isDefItemEquipped = IsDefItemEquipped();
 
-            if (_item.ItemAtk > 0 && _isAtkItemEqupped && !_item.IsItemEquipped)
+            if (_item.ItemAtk > 0 && _isAtkItemEquipped && !_item.IsItemEquipped)
             {
-                return;
+                for (int i = _playerEquippedItems.Count - 1; i >= 0; i--)
+                {
+                    ItemData item = _playerEquippedItems[i];
+                    if (item.IsItemEquipped && item.ItemAtk > 0)
+                    {
+                        item.IsItemEquipped = false;
+                        _playerEquippedItems.RemoveAt(i);
+                        break;
+                    }
+                }
             }
 
+            // 중복 방어구 아이템 제거 후 장착
             if (_item.ItemDef > 0 && _isDefItemEquipped && !_item.IsItemEquipped)
             {
-                return;
+                for (int i = _playerEquippedItems.Count -1; i >= 0; i--)
+                {
+                    ItemData item = _playerEquippedItems[i];
+                    if (item.IsItemEquipped && item.ItemDef > 0)
+                    {
+                        item.IsItemEquipped = false;
+                        _playerEquippedItems.RemoveAt(i);
+                        break;
+                    }
+                }
+                //foreach (var item in _playerEquippedItems)
+                //{
+                //    if (item.IsItemEquipped && item.ItemDef > 0)
+                //    {
+                //        item.IsItemEquipped = false;
+                //        _playerEquippedItems.Remove(item);
+                //        break;
+                //    }
+                //}
             }
 
             _item.IsItemEquipped = !_item.IsItemEquipped;
@@ -542,7 +568,6 @@
             BaseAtkValue = _atkValue;
             BaseDefValue = _defValue;
         }
-
     }
 
     public class ItemData
