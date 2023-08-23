@@ -172,6 +172,12 @@
                 if (!_itemsInDatabase[_itemIndex].IsPlayerOwned)
                 {
                     BuyItem(_itemIndex); // 아이템을 구매
+                }else if (_itemsInDatabase[_itemIndex].IsPlayerOwned == true) // 이미 인벤토리에 있는 아이템인 경우 출력
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("이미 구매한 아이템입니다.\n");
+                    Console.WriteLine("아무 키나 입력하세요...\n"); // 사용자의 입력을 기다림
+                    Console.ReadKey(); // 아무 키나 입력할 때까지 대기
                 }
                 // 상점 목록을 다시 출력
                 BuyManagementItemShop();
@@ -237,7 +243,7 @@
         static void BuyItem(int _itemIndex)
         {
             ItemData _selectedShopItem = _itemsInDatabase[_itemIndex];
-
+            
             if (_playerStat.Gold >= _selectedShopItem.ItemPrice)
             {
                 _playerStat.Gold -= _selectedShopItem.ItemPrice;

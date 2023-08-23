@@ -125,7 +125,7 @@
         static void BuyManagementItemShop()
         {
             Console.Clear();
-            Console.Title = "상점";
+            Console.Title = "상점 - 아이템 구매";
             Console.WriteLine("[보유 골드]\n");
             Console.WriteLine($"{_playerStat.Gold} G\n");
             Console.WriteLine("[상점 아이템 목록]\n");
