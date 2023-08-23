@@ -549,7 +549,7 @@
             Console.Write($"{_playerStat.Name} ");
             Console.ResetColor();
             Console.WriteLine("님, 스파르타 던전의 난이도를 선택해주세요.\n");
-            Console.WriteLine("1. 쉬움 던전 | 방어력 7이상 권장");
+            Console.WriteLine("1. 쉬움 던전 | 방어력 7이상 권장, 체력 36 이상 입장 가능");
             Console.WriteLine("2. 일반 던전 | 방어력 11이상 권장");
             Console.WriteLine("3. 어려움 던전 | 방어력 17이상 권장");
             Console.WriteLine(" ");
@@ -588,9 +588,9 @@
             SetConsoleColor(ConsoleColor.Red);
             Console.WriteLine("쉬움 던전에 입장합니다!\n");
             Console.ResetColor();
-            if (_totalHP <= 0)
+            if (_totalHP <= 36) //최소 체력이 부족하면, 이지 난이도 사망 방지!
             {
-                Console.WriteLine("체력이 부족하여 던전에 입장할 수 없습니다.");
+                Console.WriteLine("최소 체력이 부족하여 던전에 입장할 수 없습니다.");
             }
             else if (_playerDef < _recommandDef)
             {
@@ -713,6 +713,14 @@
                     Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
                     _playerStat.DungeonCleared();
                 }
+
+                if (_playerStat.HPValue <= 0)
+                {
+                    SetConsoleColor(ConsoleColor.Red);
+                    Console.WriteLine("플레이어 체력이 0보다 작아져 게임이 종료됩니다.");
+                    Console.ResetColor();
+                    Environment.Exit(0); // 게임 종료
+                }
             }
             UpdatePlayerStats();
             Console.WriteLine("아무 키나 입력하세요...");
@@ -784,6 +792,14 @@
                     Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
                     _playerStat.DungeonCleared();
                 }
+
+                if (_playerStat.HPValue <= 0)
+                {
+                    SetConsoleColor(ConsoleColor.Red);
+                    Console.WriteLine("플레이어 체력이 0보다 작아져 게임이 종료됩니다.");
+                    Console.ResetColor();
+                    Environment.Exit(0); // 게임 종료
+                }
             }
             UpdatePlayerStats();
             Console.WriteLine("아무 키나 입력하세요...");
@@ -798,7 +814,12 @@
             SetConsoleColor(ConsoleColor.Red);
             Console.WriteLine("[휴식하기]");
             Console.ResetColor();
-            Console.WriteLine($"500 G를 지불하면, 체력을 회복할 수 있습니다. (보유 골드 : {_playerStat.Gold} G)\n");
+            Console.Write($"500 G를 지불하면, 체력을 회복할 수 있습니다. (보유 골드 : ");
+            SetConsoleColor(ConsoleColor.Yellow);
+            Console.Write($"{_playerStat.Gold} ");
+            Console.ResetColor();
+            Console.WriteLine("G)");
+
 
             Console.WriteLine("0. 나가기");
             Console.WriteLine("1. 휴식하기");
@@ -829,7 +850,7 @@
                     _playerStat.HPValue = 100;
 
                     Console.Write("휴식을 완료했습니다. 체력이 모두 회복되었습니다.");
-                    Console.WriteLine($"현재 골드 : {_playerStat.Gold}");
+                    Console.WriteLine($"현재 골드 : {_playerStat.Gold} G");
                 }
                 else
                 {
