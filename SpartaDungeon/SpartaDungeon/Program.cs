@@ -972,7 +972,7 @@
         public int ItemAtk;
         public int ItemDef;
         public string ItemComm;
-        public int ItemPrice { get; set; }
+        public int ItemPrice;
 
         public ItemData(int _itemId, string _itemName, int _itemAtk, int _itemDef, string _itemComm, int _itemPrice, bool _isPlayerOwned)
         {
