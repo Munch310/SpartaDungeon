@@ -670,7 +670,7 @@
             }
             else if (_playerDef < _recommandDef)
             {
-                if (_enterRandomPer <= 0.4)
+                if (_enterRandomPer <= 0.7)
                 {
                     int _failDungeon = _totalHP / 2;
                     _playerStat.HPValue = _failDungeon;
@@ -742,7 +742,7 @@
             }
             else if (_playerDef < _recommandDef)
             {
-                if (_enterRandomPer <= 0.4)
+                if (_enterRandomPer <= 0.9)
                 {
                     int _failDungeon = _totalHP / 2;
                     _playerStat.HPValue = _failDungeon;
