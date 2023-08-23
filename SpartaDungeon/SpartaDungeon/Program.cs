@@ -587,6 +587,13 @@
             int _recommandDef = 6;
             int _playerDef = _playerStat.DefValue;
             int _totalHP = _playerStat.HPValue;
+            int _decreasePerHP = new Random().Next(20, 36); // HP 감소는 20~35
+            int _defDifference = _playerDef - _recommandDef; // 방어력 차이 계산, 플레이어 방어력 - 권장 방어력 
+
+            int _reward = 1000; // 기본 리워드
+            double _plusReward = _playerStat.AtkValue * 0.2 * 100; // 공격력에 따른 추가 리워드
+            int _totalReward = (int)(_reward + _plusReward); // 총 리워드
+            _playerStat.Gold += _totalReward; // 리워드 업데이트 
 
             double _enterRandomPer = new Random().NextDouble();
             SetConsoleColor(ConsoleColor.Red);
@@ -606,20 +613,21 @@
                 }
                 else
                 {
+                    // 만약 권장 방어력 보다 내 방어력이 낮으면
+                    _totalHP = _decreasePerHP + _defDifference;
+                    _playerStat.HPValue -= _totalHP;
+                    Console.WriteLine("던전 클리어!");
+                    Console.WriteLine($"쉬운 던전을 클리어 하였습니다.\n");
+                    Console.WriteLine($"[탐험 결과]");
+                    Console.WriteLine($"Gold {_totalReward} G\n");
+                    Console.WriteLine($"체력 {_totalHP} 감소!");
+                    Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
+                    _playerStat.DungeonCleared();
                     Console.WriteLine("던전 실패!");
                 }
             }
             else
             {
-                int _decreasePerHP = new Random().Next(20, 36); // HP 감소는 20~35
-                int _defDifference = _playerDef - _recommandDef; // 방어력 차이 계산, 플레이어 방어력 - 권장 방어력 
-
-                int _reward = 1000; // 기본 리워드
-                double _plusReward = _playerStat.AtkValue * 0.2 * 100; // 공격력에 따른 추가 리워드
-                int _totalReward = (int)(_reward + _plusReward); // 총 리워드
-                _playerStat.Gold += _totalReward; // 리워드 업데이트 
-
-
                 if (_defDifference > 0)
                 {
                     _totalHP = _decreasePerHP - _defDifference;
@@ -631,21 +639,6 @@
                     Console.WriteLine($"체력 {_totalHP} 감소!");
                     Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
                     _playerStat.DungeonCleared();
-
-                }
-                else
-                {
-                    // 만약 권장 방어력 보다 내 방어력이 낮으면
-                    _totalHP = _decreasePerHP + _defDifference;
-                    _playerStat.HPValue -= _totalHP;
-                    Console.WriteLine("던전 클리어!");
-                    Console.WriteLine($"쉬운 던전을 클리어 하였습니다.\n");
-                    Console.WriteLine($"[탐험 결과]");
-                    Console.WriteLine($"Gold {_totalReward} G\n");
-                    Console.WriteLine($"체력 {_totalHP} 감소!");
-                    Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
-                    _playerStat.DungeonCleared();
-
                 }
             }
             UpdatePlayerStats();
@@ -659,6 +652,13 @@
             int _recommandDef = 11;
             int _playerDef = _playerStat.DefValue;
             int _totalHP = _playerStat.HPValue;
+            int _decreasePerHP = new Random().Next(20, 36); // HP 감소는 20~35
+            int _defDifference = _playerDef - _recommandDef; // 방어력 차이 계산, 플레이어 방어력 - 권장 방어력 
+
+            int _reward = 1700; // 기본 리워드
+            double _plusReward = _playerStat.AtkValue * 0.3 * 100; // 공격력에 따른 추가 리워드
+            int _totalReward = (int)(_reward + _plusReward); // 총 리워드
+            _playerStat.Gold += _totalReward; // 리워드 업데이트 
 
             double _enterRandomPer = new Random().NextDouble();
             SetConsoleColor(ConsoleColor.Red);
@@ -678,20 +678,20 @@
                 }
                 else
                 {
-                    Console.WriteLine("던전 실패!");
+                    // 만약 권장 방어력 보다 내 방어력이 낮으면
+                    _totalHP = _decreasePerHP + _defDifference;
+                    _playerStat.HPValue -= _totalHP;
+                    Console.WriteLine("[던전 클리어]!");
+                    Console.WriteLine($"일반 던전을 클리어 하였습니다.\n");
+                    Console.WriteLine($"[탐험 결과]");
+                    Console.WriteLine($"Gold {_totalReward} G\n");
+                    Console.WriteLine($"체력 {_totalHP} 감소!");
+                    Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
+                    _playerStat.DungeonCleared();
                 }
             }
             else
             {
-                int _decreasePerHP = new Random().Next(20, 36); // HP 감소는 20~35
-                int _defDifference = _playerDef - _recommandDef; // 방어력 차이 계산, 플레이어 방어력 - 권장 방어력 
-
-                int _reward = 1700; // 기본 리워드
-                double _plusReward = _playerStat.AtkValue * 0.3 * 100; // 공격력에 따른 추가 리워드
-                int _totalReward = (int)(_reward + _plusReward); // 총 리워드
-                _playerStat.Gold += _totalReward; // 리워드 업데이트 
-
-
                 if (_defDifference > 0)
                 {
                     _totalHP = _decreasePerHP - _defDifference;
@@ -704,27 +704,13 @@
                     Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
                     _playerStat.DungeonCleared();
                 }
-                else
-                {
-                    // 만약 권장 방어력 보다 내 방어력이 낮으면
-                    _totalHP = _decreasePerHP + _defDifference;
-                    _playerStat.HPValue -= _totalHP;
-                    Console.WriteLine("[던전 클리어]!");
-                    Console.WriteLine($"일반 던전을 클리어 하였습니다.\n");
-                    Console.WriteLine($"[탐험 결과]");
-                    Console.WriteLine($"Gold {_totalReward} G\n");
-                    Console.WriteLine($"체력 {_totalHP} 감소!");
-                    Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
-                    _playerStat.DungeonCleared();
-                }
-
-                if (_playerStat.HPValue <= 0)
-                {
-                    SetConsoleColor(ConsoleColor.Red);
-                    Console.WriteLine("플레이어 체력이 0보다 작아져 게임이 종료됩니다.");
-                    Console.ResetColor();
-                    Environment.Exit(0); // 게임 종료
-                }
+            }
+            if (_playerStat.HPValue <= 0)
+            {
+                SetConsoleColor(ConsoleColor.Red);
+                Console.WriteLine("플레이어 체력이 0보다 작아져 게임이 종료됩니다.");
+                Console.ResetColor();
+                Environment.Exit(0); // 게임 종료
             }
             UpdatePlayerStats();
             Console.WriteLine("아무 키나 입력하세요...");
@@ -737,6 +723,13 @@
             int _recommandDef = 17;
             int _playerDef = _playerStat.DefValue;
             int _totalHP = _playerStat.HPValue;
+            int _decreasePerHP = new Random().Next(20, 36); // HP 감소는 20~35
+            int _defDifference = _playerDef - _recommandDef; // 방어력 차이 계산, 플레이어 방어력 - 권장 방어력 
+
+            int _reward = 2500; // 기본 리워드
+            double _plusReward = _playerStat.AtkValue * 0.4 * 100; // 공격력에 따른 추가 리워드
+            int _totalReward = (int)(_reward + _plusReward); // 총 리워드
+            _playerStat.Gold += _totalReward; // 리워드 업데이트 
 
             double _enterRandomPer = new Random().NextDouble();
             SetConsoleColor(ConsoleColor.Red);
@@ -757,20 +750,20 @@
                 }
                 else
                 {
-                    Console.WriteLine("어려움 던전 실패!");
+                    // 만약 권장 방어력 보다 내 방어력이 낮으면
+                    _totalHP = _decreasePerHP + _defDifference;
+                    _playerStat.HPValue -= _totalHP;
+                    Console.WriteLine("[던전 클리어]!");
+                    Console.WriteLine($"어려움 던전을 클리어 하였습니다.\n");
+                    Console.WriteLine($"[탐험 결과]");
+                    Console.WriteLine($"Gold {_totalReward} G\n");
+                    Console.WriteLine($"체력 {_totalHP} 감소!");
+                    Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
+                    _playerStat.DungeonCleared();
                 }
             }
             else
             {
-                int _decreasePerHP = new Random().Next(20, 36); // HP 감소는 20~35
-                int _defDifference = _playerDef - _recommandDef; // 방어력 차이 계산, 플레이어 방어력 - 권장 방어력 
-
-                int _reward = 2500; // 기본 리워드
-                double _plusReward = _playerStat.AtkValue * 0.4 * 100; // 공격력에 따른 추가 리워드
-                int _totalReward = (int)(_reward + _plusReward); // 총 리워드
-                _playerStat.Gold += _totalReward; // 리워드 업데이트 
-
-
                 if (_defDifference > 0)
                 {
                     _totalHP = _decreasePerHP - _defDifference;
@@ -783,27 +776,13 @@
                     Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
                     _playerStat.DungeonCleared();
                 }
-                else
-                {
-                    // 만약 권장 방어력 보다 내 방어력이 낮으면
-                    _totalHP = _decreasePerHP + _defDifference;
-                    _playerStat.HPValue -= _totalHP;
-                    Console.WriteLine("[던전 클리어]!");
-                    Console.WriteLine($"어려움 던전을 클리어 하였습니다.\n");
-                    Console.WriteLine($"[탐험 결과]");
-                    Console.WriteLine($"Gold {_totalReward} G\n");
-                    Console.WriteLine($"체력 {_totalHP} 감소!");
-                    Console.WriteLine($"현재 체력 {_playerStat.HPValue}\n");
-                    _playerStat.DungeonCleared();
-                }
-
-                if (_playerStat.HPValue <= 0)
-                {
-                    SetConsoleColor(ConsoleColor.Red);
-                    Console.WriteLine("플레이어 체력이 0보다 작아져 게임이 종료됩니다.");
-                    Console.ResetColor();
-                    Environment.Exit(0); // 게임 종료
-                }
+            }
+            if (_playerStat.HPValue <= 0)
+            {
+                SetConsoleColor(ConsoleColor.Red);
+                Console.WriteLine("플레이어 체력이 0보다 작아져 게임이 종료됩니다.");
+                Console.ResetColor();
+                Environment.Exit(0); // 게임 종료
             }
             UpdatePlayerStats();
             Console.WriteLine("아무 키나 입력하세요...");
@@ -948,8 +927,6 @@
             BaseAtkValue += 1;
             BaseDefValue += 2;
             Console.WriteLine($"레벨 업! Lv. {Level}, 공격력 증가 + 1, 방어력 증가 + 2");
-
-
         }
 
         public void DungeonCleared()
