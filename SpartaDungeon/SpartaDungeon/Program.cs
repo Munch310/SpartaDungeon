@@ -803,6 +803,7 @@
             Console.Title = "휴식하기";
             SetConsoleColor(ConsoleColor.Red);
             Console.WriteLine("[휴식하기]");
+            Console.WriteLine($"현재 체력 : {_playerStat.HPValue}");
             Console.ResetColor();
             Console.Write($"500 G를 지불하면, 체력을 회복할 수 있습니다. (보유 골드 : ");
             SetConsoleColor(ConsoleColor.Yellow);
