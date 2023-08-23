@@ -4,7 +4,7 @@ C# Text RPG Game
 
 ## 🖥️ 프로젝트 소개
 스파르타 코딩클럽 내일배움캠프 C# 개인 과제 입니다.
-C#언어를 이용해 Text RPG Game을 제작했습니다.
+C# Text RPG Game을 제작했습니다.
 <br>
 
 ## 🕰️ 개발 기간
@@ -14,37 +14,37 @@ C#언어를 이용해 Text RPG Game을 제작했습니다.
  - 문현우 개인 제작.
 
 ### ⚙️ 개발 환경
-- `Java 8`
-- `JDK 1.8.0`
-- **IDE** : STS 3.9
-- **Framework** : Springboot(2.x)
-- **Database** : Oracle DB(11xe)
-- **ORM** : Mybatis
+- `C#`
+- **IDE** : Visual Studio 2022
+- **Framework** : .NET
 
 ## 📌 주요 기능
-#### 로그인 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Login)" >상세보기 - WIKI 이동</a>
-- DB값 검증
-- ID찾기, PW찾기
-- 로그인 시 쿠키(Cookie) 및 세션(Session) 생성
-#### 회원가입 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Member)" >상세보기 - WIKI 이동</a>
-- 주소 API 연동
-- ID 중복 체크
-#### 마이 페이지 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(Member)" >상세보기 - WIKI 이동</a>
-- 주소 API 연동
-- 회원정보 변경
+#### 초기 & 메인 화면 - <a href="https://github.com/Munch310/SpartaDungeon/wiki/1.-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EC%B4%88%EA%B8%B0-&-%EB%A9%94%EC%9D%B8-%ED%99%94%EB%A9%B4)" >상세보기 - WIKI 이동</a>
+- 초기 화면(게임 실행)
+- 메인 화면
+- #### 아이템 - <a href="https://github.com/Munch310/SpartaDungeon/wiki/2.-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EC%95%84%EC%9D%B4%ED%85%9C)" >상세보기 - WIKI 이동</a>
+- 아이템 클래스
+- 아이템 초기화
+#### 플레이어- <a href="https://github.com/Munch310/SpartaDungeon/wiki/3.-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%ED%94%8C%EB%A0%88%EC%9D%B4%EC%96%B4-%EC%A0%95%EB%B3%B4)" >상세보기 - WIKI 이동</a>
+- 플레이어 정보 클래스
+- 플레이어 정보 초기화
+- 플레이어 정보 출력
+- 플레이어 공격력 / 방어력 업데이트
+#### 인벤토리 - <a href="https://github.com/Munch310/SpartaDungeon/wiki/4.-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EC%9D%B8%EB%B2%A4%ED%86%A0%EB%A6%AC)" >상세보기 - WIKI 이동</a>
+- 인벤토리 초기 화면
+- 인벤토리 관리 화면
+- 인벤토리 장착 관리
 
-#### 영화 예매 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(%EC%98%81%ED%99%94-%EC%98%88%EB%A7%A4)" >상세보기 - WIKI 이동</a>
-- 영화 선택(날짜 지정)
-- 영화관 선택(대분류/소분류 선택) 및 시간 선택
-- 좌석 선택
-- 결제 페이지
-- 예매 완료
-#### 메인 페이지 - <a href="https://github.com/chaehyuenwoo/SpringBoot-Project-MEGABOX/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C(%EB%A9%94%EC%9D%B8-Page)" >상세보기 - WIKI 이동</a>
-- YouTube API 연동
-- 메인 포스터(영화) 이미지 슬라이드(CSS)
-#### 1대1문의 및 공지사항 - <a href="" >상세보기 - WIKI 이동</a> 
-- 글 작성, 읽기, 수정, 삭제(CRUD)
+#### 상점 - <a href="https://github.com/Munch310/SpartaDungeon/wiki/5.-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EC%83%81%EC%A0%90)" >상세보기 - WIKI 이동</a>
+- 상점 초기 화면
+- 상점 구매 화면
+- 상점 판매 화면
+- 아이템 구매 및 판매
+#### 던전 - <a href="https://github.com/Munch310/SpartaDungeon/wiki/6.-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%EB%8D%98%EC%A0%84)" >상세보기 - WIKI 이동</a>
+- 던전 초기 화면
+- 쉬움 던전
+- 일반 던전 & 어려움 던전
+#### 휴식 - <a href="https://github.com/Munch310/SpartaDungeon/wiki/7.-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C-(%ED%9C%B4%EC%8B%9D)" >상세보기 - WIKI 이동</a> 
+- 휴식
 
-#### 관리자 페이지 
-- 영화관 추가(대분류, 소분류)
-- 영화 추가(상영시간 및 상영관 설정)
+#### 추가 기능 - <a href="https://github.com/Munch310/SpartaDungeon/wiki/8.-%EC%B6%94%EA%B0%80-%EA%B8%B0%EB%8A%A5" >상세보기 - WIKI 이동</a> 
