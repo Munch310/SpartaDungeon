@@ -22,7 +22,7 @@
             _itemsInDatabase.Add(new ItemData(2, "헤라클레스의 곤봉", 5, 0, "이 곤봉은 12가지 과업을 대비해서 갖고 다녀야합니다.", 500, false));
             _itemsInDatabase.Add(new ItemData(3, "포세이돈의 삼지창", 10, 0, "이 삼지창을 쥐면 바다를 다스릴 수 있습니다.", 1000, false));
             _itemsInDatabase.Add(new ItemData(4, "신령의 갑옷", 0, 15, "신비한 힘이 깃든 갑옷", 1300, false));
-            _itemsInDatabase.Add(new ItemData(5, "트리스메기투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다.", 3000, false));
+            _itemsInDatabase.Add(new ItemData(5, "트리스메기스투스의 지팡이", 30, 0, "미지의 세계, 아틀란티스로 갈 수 있는 열쇠입니다.", 3000, false));
         }
 
         static void PlayerDataSet()
@@ -128,7 +128,7 @@
                 ItemData _shopItem = _itemsInDatabase[i];
                 string _itemName = FormatAndPad(_shopItem.ItemName, 17);
                 string _itemComm = FormatAndPad(_shopItem.ItemComm, 40);
-
+                // if(_shopItem.IsPlayerOwned == false)
                 if (!_shopItem.IsPlayerOwned)
                 {
                     Console.WriteLine($"{i + 1} | {_itemName} | {_itemComm} | 구매 가격 : {_shopItem.ItemPrice} G");
