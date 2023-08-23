@@ -27,9 +27,10 @@
 
         static void PlayerDataSet()
         {
+            Console.Clear();
             Console.Title = "닉네임을 설정하세요!";
             Console.WriteLine("게임에 사용하실 닉네임을 입력해주세요!");
-            Console.Write(">>");
+            Console.Write(">>\n");
 
             string inputName = Console.ReadLine();
 
@@ -40,7 +41,10 @@
             }
             else
             {
-                Console.WriteLine("이름을 입력해주세요!");
+                Console.WriteLine("이름을 입력해주세요!\n");
+                Console.WriteLine("아무 키나 입력하세요...\n"); // 사용자의 입력을 기다림
+                Console.ReadKey(); // 아무 키나 입력할 때까지 대기
+                PlayerDataSet();
             }
         }
 
