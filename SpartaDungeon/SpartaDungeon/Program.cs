@@ -13,22 +13,23 @@ namespace SpartaDungeon
             // witdht, height
             Console.SetWindowSize(200, 50);
             LoadGameData();
-            //PlayerDataSet();
             MainGameScene();
         }
 
+        // 역 직렬화
         static void LoadGameData()
         {
-            string playerFileName = "playerStat.json";
-            string itemFileName = "itemData.json";
-            string userDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string _playerFileName = "playerStat.json";
+            string _itemFileName = "itemData.json";
+            // 데이터 경로 불러오기. (C드라이브, Documents)
+            string _userDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             // 플레이어 데이터 로드
-            string playerFilePath = Path.Combine(userDocumentsFolder, playerFileName);
-            if (File.Exists(playerFilePath))
+            string _playerFilePath = Path.Combine(_userDocumentsFolder, _playerFileName);
+            if (File.Exists(_playerFilePath))
             {
-                string playerJson = File.ReadAllText(playerFilePath);
-                _playerStat = JsonConvert.DeserializeObject<PlayerStat>(playerJson);
+                string _playerJson = File.ReadAllText(_playerFilePath);
+                _playerStat = JsonConvert.DeserializeObject<PlayerStat>(_playerJson);
                 Console.WriteLine("플레이어 데이터를 불러왔습니다.");
             }
             else
@@ -39,11 +40,11 @@ namespace SpartaDungeon
             }
 
             // 아이템 데이터 로드
-            string itemFilePath = Path.Combine(userDocumentsFolder, itemFileName);
-            if (File.Exists(itemFilePath))
+            string _itemFilePath = Path.Combine(_userDocumentsFolder, _itemFileName);
+            if (File.Exists(_itemFilePath))
             {
-                string itemJson = File.ReadAllText(itemFilePath);
-                _itemsInDatabase = JsonConvert.DeserializeObject<List<ItemData>>(itemJson);
+                string _itemJson = File.ReadAllText(_itemFilePath);
+                _itemsInDatabase = JsonConvert.DeserializeObject<List<ItemData>>(_itemJson);
                 Console.WriteLine("아이템 데이터를 불러왔습니다.");
             }
             else
@@ -881,6 +882,7 @@ namespace SpartaDungeon
                     // Json 직렬화
                     string _fileName = "playerStat.json";
                     string _itemFileName = "itemData.json";
+                    // 데이터 경로 저장. (C드라이브, Documents)
                     string _userDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     string _filePath = Path.Combine(_userDocumentsFolder, _fileName);
                     string _itemFilePath = Path.Combine(_userDocumentsFolder, _itemFileName);
@@ -890,6 +892,8 @@ namespace SpartaDungeon
                     File.WriteAllText(_filePath, _playerJson);
                     File.WriteAllText(_itemFilePath, _itemJson);
                     Console.WriteLine("저장이 완료되었습니다.");
+
+
 
                     Console.Write("휴식을 완료했습니다. 체력이 모두 회복되었습니다.");
                     Console.WriteLine($"현재 골드 : {_playerStat.Gold} G");
