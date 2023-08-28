@@ -1,4 +1,6 @@
-﻿namespace SpartaDungeon
+﻿using Newtonsoft.Json;
+
+namespace SpartaDungeon
 {
     internal class Program
     {
@@ -10,11 +12,47 @@
         {
             // witdht, height
             Console.SetWindowSize(200, 50);
-            InitItemDatabase();
-            PlayerDataSet();
+            LoadGameData();
+            //PlayerDataSet();
             MainGameScene();
         }
 
+        static void LoadGameData()
+        {
+            string playerFileName = "playerStat.json";
+            string itemFileName = "itemData.json";
+            string userDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            // 플레이어 데이터 로드
+            string playerFilePath = Path.Combine(userDocumentsFolder, playerFileName);
+            if (File.Exists(playerFilePath))
+            {
+                string playerJson = File.ReadAllText(playerFilePath);
+                _playerStat = JsonConvert.DeserializeObject<PlayerStat>(playerJson);
+                Console.WriteLine("플레이어 데이터를 불러왔습니다.");
+            }
+            else
+            {
+                Console.WriteLine("저장된 플레이어 데이터가 없습니다.");
+                Thread.Sleep(300);
+                PlayerDataSet();
+            }
+
+            // 아이템 데이터 로드
+            string itemFilePath = Path.Combine(userDocumentsFolder, itemFileName);
+            if (File.Exists(itemFilePath))
+            {
+                string itemJson = File.ReadAllText(itemFilePath);
+                _itemsInDatabase = JsonConvert.DeserializeObject<List<ItemData>>(itemJson);
+                Console.WriteLine("아이템 데이터를 불러왔습니다.");
+            }
+            else
+            {
+                Console.WriteLine("저장된 아이템 데이터가 없습니다.");
+                _itemsInDatabase = new List<ItemData>(); // 빈 리스트로 초기화
+                InitItemDatabase();
+            }
+        }
         static void InitItemDatabase()
         {
             _itemsInDatabase.Add(new ItemData(0, "낡은 검", 2, 0, "쉽게 볼 수 있는 낡은 검입니다.", 200, true));
@@ -840,8 +878,22 @@
                     _playerStat.Gold -= _restCost;
                     _playerStat.HPValue = 100;
 
+                    // Json 직렬화
+                    string _fileName = "playerStat.json";
+                    string _itemFileName = "itemData.json";
+                    string _userDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    string _filePath = Path.Combine(_userDocumentsFolder, _fileName);
+                    string _itemFilePath = Path.Combine(_userDocumentsFolder, _itemFileName);
+
+                    string _playerJson = JsonConvert.SerializeObject(_playerStat, Formatting.Indented);
+                    string _itemJson = JsonConvert.SerializeObject(_itemsInDatabase, Formatting.Indented);
+                    File.WriteAllText(_filePath, _playerJson);
+                    File.WriteAllText(_itemFilePath, _itemJson);
+                    Console.WriteLine("저장이 완료되었습니다.");
+
                     Console.Write("휴식을 완료했습니다. 체력이 모두 회복되었습니다.");
                     Console.WriteLine($"현재 골드 : {_playerStat.Gold} G");
+                    Thread.Sleep(100);
                 }
                 else
                 {
